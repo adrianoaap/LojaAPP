@@ -1,0 +1,18 @@
+
+LAZY
+  - Eu iniciei a chamada de um método na classe Dao, o entity manager é criado. Saí do método, fiz o return, o entity manager é fechado.
+  - se você tentar acessar uma informação que é lazy, que não havia sido carregada antes, pode ser que o entity manager já esteja fechado e
+    você tome essa exception, que é o "LazyInitializationException".
+  - Em projetos reais, é muito comum isso acontecer, você tomar essa exception, porque o entity manager já foi fechado.
+  - Às vezes você nem tem o controle, é o próprio servidor de aplicação, é o próprio frameworK que está gerenciando o entity manager,
+    não foi você que instanciou e que fez o close, então você nem sabe onde foi fechado.
+  - A solução é você usar uma ideia que é chamada de query planejada.
+
+   Exemplo Query Planejada
+    public BigDecimal buscarPrecoProdutoComNome(String nomeProduto) {
+        String jpql = "SELECT p.preco FROM Produto p WHERE p.nome =:nome";
+        return entityManager.createQuery(jpql, BigDecimal.class).setParameter("nome", nomeProduto)
+        .getSingleResult();
+    }
+
+

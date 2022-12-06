@@ -1,0 +1,30 @@
+
+  - Existem essas duas estratégias de carregamento, o carregamento eager, que carrega junto com a entidade,
+     por mais que você não utilize aquele relacionamento, e o carregamento lazy, que só carrega se for feito o acesso.
+     Por padrão, todo relacionamento to one é eager, é carregado junto automaticamente com a entidade.
+     E os relacionamentos to many são lazy, só são carregados se você fizer o acesso.
+
+  - Por padrão, na JPA, todo relacionamento que é to one, ou seja, many to one ou one to one ( @ManyToOne ou @OneToOne ),
+    que é um outro relacionamento, de um para um, automaticamente, a JPA, ela sempre vai fazer um select,
+    vai incluir um join para carregar esse registro sempre que você carregar a entidade principal.
+
+  - Mas é comum você encontrar entidades que tem 3, 5, 8, 10 relacionamentos many to one ou one to one ( @ManyToOne ou @OneToOne ).
+    Para cada um desses relacionamentos, a JPA iria fazer um join para carregar todas essas informações, sendo que não necessariamente
+    você precisaria de todas essas informações.
+    Isso pode gerar um gargalo no sistema, você carregar coisas demais, coisas desnecessárias.
+    Exemplo: @ManyToOne(fetch = FetchType.EAGER) - por padrão
+
+  - A nossa entidade "Pedido", ela também tem um relacionamento, que é essa lista List<ItemPedido>.
+     Porém, se analisarmos no SQL, ele não fez join com a tabela de item pedido.
+     Isso porque o relacionamento ItemPedido, a cardinalidade dele, ele é um to many. Os relacionamentos to many,
+     one to many ou many to many ( @OneToMany ou @ManyToMany ), ele não tem essa característica de quando você carrega o pedido,
+     a JPA carregar junto essa lista, justamente por conta de ser uma lista.
+
+  - A boa prática é: todo relacionamento to one, coloque o carregamento para ser lazy, (fetch = FetchType.LAZY),
+      porque por padrão, ele é eager. Se você carregou o pedido, não importa, ele sempre vai carregar o cliente,
+      se ele for um relacionamento to one, então mudamos para lazy.
+      Exemplo
+      @ManyToOne(fetch = FetchType.LAZY)
+      private Cliente cliente;
+
+  - Relacionamentos to many já são lazy, você não precisa colocar, agora, os to one, são eager por padrão, então você tem que trocar para lazy.

@@ -1,0 +1,23 @@
+  - Eu estou aqui com a nossa entidade "Cliente" e vou fazer uma pequena alteração nessa classe. A
+     té então só temos três atributos aqui, o ID, o nome e o CPF.
+
+  - obviamente, essa classe provavelmente vai crescer e vai ter novos atributos, então vou precisar de outras informações
+     do cliente: telefone, endereço, e-mail, enfim.
+
+  - Uma maneira de você começar a organizar esse código é tentar agrupar esses atributos que são comuns e extrair para classes.
+     Por exemplo, ao invés de deixar um nome e CPF aqui na classe Cliente, e outros dados pessoais, eu poderia criar uma classe
+     chamada dados pessoais e lá dentro eu coloco os atributos que são de dados pessoais.
+
+  - Vou crias a classe Dados Pessoas anotar ela com @Embeddable, essa anotação do "javax persistence".
+     Eu estou falando: JPA, essa classe é embutível, eu consigo embuti-la dentro de uma entidade. Você precisa indicar isso para a JPA.
+
+  - Já o @Embedded é utilizada para marcar campos ou métodos getter nas entidades que referencia a entidade embutida.
+
+  - exemplos
+
+   @Embeddable                       Cliente                              Funcionario
+   DadosPessoais                      @Embedded                             @Embedded
+     private String nome;             private DadosPessoais dp;             private DadosPessoais dp;
+     private String cpf;
+     private String cidade;
+     private String email;
